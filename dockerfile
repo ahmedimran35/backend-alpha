@@ -26,7 +26,7 @@ RUN npm prune --production
 ENV NODE_ENV=production \
     PORT=5003
 
-# Expose the port
+# Expose the port 
 EXPOSE 5003
 
 # Start the application
