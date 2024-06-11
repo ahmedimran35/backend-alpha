@@ -21,7 +21,7 @@ RUN npm run build
 EXPOSE 5003
 
 # Change permission of entrypoint script
-RUN ["chmod", "+x", "./entrypoint.sh"]
+#RUN ["chmod", "+x", "./entrypoint.sh"]
 
 # Set the entrypoint
 ENTRYPOINT ["sh", "./entrypoint.sh"]
