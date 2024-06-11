@@ -1,20 +1,30 @@
-FROM node   
-#directly use node image
+# Use a lightweight and official Node.js image as the base
+FROM node:18-slim
 
+# Set the working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files
+# Copy package.json and package-lock.json (if available)
 COPY package*.json ./
 
-# Install application dependencies
+# Install production dependencies
 RUN npm ci --only=production
 
-# Copy the rest of the application code
+# Copy the application code
 COPY . .
 
-# Build the application
-RUN npm run build
-#build 
+# Build the application (if necessary)
+ RUN npm run build
+
+# Set the environment variable for the port
+
+
+# Expose the port
 EXPOSE 5003
 
-ENTRYPOINT [ "node", "dist/server.js" ]
+# Use a non-root user for better security
+# Replace 'userId' with a valid user ID or username
+
+
+# Start the application
+CMD ["node", "dist/server.js"]
