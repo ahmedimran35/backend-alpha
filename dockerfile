@@ -14,8 +14,7 @@ RUN npm ci --only=production
 COPY . .
 
 # Build the application (if necessary)
-# Uncomment this line if your application has a build step
- RUN npm run build
+RUN npm run build
 
 # Set environment variables
 ENV NODE_ENV=production \
@@ -25,5 +24,5 @@ ENV NODE_ENV=production \
 EXPOSE 5003
 
 # Start the application
-# Replace `entrypoint.sh` with your entry script or main application file
-CMD ["node", "dist/server.js"]
+# Replace `server.js` with your entry script or main application file
+CMD ["node", "server.js"]
