@@ -7,14 +7,17 @@ WORKDIR /app
 # Copy package.json and package-lock.json (if available)
 COPY package*.json ./
 
-# Install production dependencies
-RUN npm ci --only=production
+# Install all dependencies (including development dependencies)
+RUN npm install
 
 # Copy the entire application code
 COPY . .
 
-# Build the application (if necessary)
+# Build the application
 RUN npm run build
+
+# Remove development dependencies
+RUN npm prune --production
 
 # Set environment variables
 ENV NODE_ENV=production \
@@ -24,5 +27,4 @@ ENV NODE_ENV=production \
 EXPOSE 5003
 
 # Start the application
-# Replace `server.js` with your entry script or main application file
 CMD ["node", "server.js"]
