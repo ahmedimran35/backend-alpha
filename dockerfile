@@ -14,7 +14,8 @@ RUN npm ci --only=production
 COPY . .
 
 # Build the application (if necessary)
-# RUN npm run build
+# Uncomment this line if your application has a build step
+ RUN npm run build
 
 # Set environment variables
 ENV NODE_ENV=production \
@@ -23,8 +24,6 @@ ENV NODE_ENV=production \
 # Expose the port
 EXPOSE 5003
 
-# Use a non-root user for better security
-# Replace 'userId' with a valid user ID or username
-
 # Start the application
-CMD ["node", "entrypoint.sh"]
+# Replace `entrypoint.sh` with your entry script or main application file
+CMD ["node", "dist/server.js"]
