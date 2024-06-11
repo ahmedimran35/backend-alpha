@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Copy environment file
-COPY .env .env
+# COPY .env .env
 
 # Run the build command
 RUN npm run build
