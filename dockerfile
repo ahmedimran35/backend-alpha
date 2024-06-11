@@ -9,6 +9,7 @@ COPY . .
 
 RUN npm i
 #build 
+RUN npm run build
 EXPOSE 5003
 
 ENTRYPOINT [ "node", "dist/server.js" ]
