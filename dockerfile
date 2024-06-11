@@ -1,15 +1,26 @@
 FROM node   
 #directly use node image
 
+# Set the working directory inside the container
 WORKDIR /app
-#Everything will run from app
 
+# Copy package.json and package-lock.json first to leverage Docker cache
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
 COPY . .
-#Copy Everything From source to destination
 
-RUN npm i
-#build 
-RUN npm run build 
+# Build the application
+RUN npm run build
+
+# Expose the port the app runs on
 EXPOSE 5003
 
-ENTRYPOINT [ "node", "dist/server.js" ]
+# Set the environment variable for production
+ENV NODE_ENV=production
+
+# Start the application
+CMD [ "node", "dist/server.js" ]
