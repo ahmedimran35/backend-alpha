@@ -27,4 +27,4 @@ ENV NODE_ENV=production \
 EXPOSE 5003
 
 # Start the application
-CMD ["node", "server.js"]
+CMD ["node", "dist/server.js"]
