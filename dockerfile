@@ -1,33 +1,22 @@
 # Use a lightweight and official Node.js image as the base
 FROM node:18-slim
 
-# Set the working directory
-WORKDIR /app
+# Use the official Node.js 14 image as base
 
-# Copy package.json and package-lock.json (if available)
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm install
 
-# Install TypeScript globally
-RUN npm install -g typescript
-
-# Copy the application code
+# Copy the built files to the working directory
 COPY . .
 
-# Build the application
-RUN npm run build
-
-# Set the environment variable for the port
-ENV PORT=5003
-
-# Expose the port
+# Expose the port your app runs on
 EXPOSE 5003
 
-# Use a non-root user for better security
-# Replace 'userId' with a valid user ID or username
-USER userId
-
-# Start the application
-CMD ["node", "dist/server.js"]
+# Command to run the application
+CMD ["node", "server.js"]
