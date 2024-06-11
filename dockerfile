@@ -4,7 +4,7 @@ FROM node:18-slim
 # Use the official Node.js 14 image as base
 
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
