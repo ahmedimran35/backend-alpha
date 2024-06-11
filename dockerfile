@@ -1,33 +1,14 @@
-# Use the official Node.js LTS image as the base
-FROM node:18-bullseye-slim
+FROM node   
+#directly use node image
 
-# Set the working directory
 WORKDIR /app
+#Everything will run from app
 
-# Copy package.json and package-lock.json (if available)
-COPY package*.json ./
-
-# Install all dependencies (including development dependencies)
-RUN npm install
-
-# Copy the entire application code
 COPY . .
+#Copy Everything From source to destination
 
-# Copy the .env file
-COPY .env .env
-
-# Build the application
-RUN npm run build
-
-# Remove development dependencies
-RUN npm prune --production
-
-# Set environment variables
-ENV NODE_ENV=production \
-    PORT=5003
-
-# Expose the port
+RUN npm i
+#build 
 EXPOSE 5003
 
-# Start the application
-CMD ["node", "dist/server.js"]
+ENTRYPOINT [ "node", "dist/server.js" ]
