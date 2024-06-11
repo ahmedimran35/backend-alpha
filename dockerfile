@@ -24,5 +24,5 @@ EXPOSE 5003
 #RUN ["chmod", "+x", "./entrypoint.sh"]
 
 # Set the entrypoint
-ENTRYPOINT ["sh", "./entrypoint.sh"]
+ENTRYPOINT [ "node", "dist/server.js" ]
 
