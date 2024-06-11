@@ -1,28 +1,31 @@
-FROM node:lts-alpine3.19
+# Use the official Node.js LTS image as the base
+FROM node:18-bullseye-slim
 
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json first to leverage Docker's layer caching mechanism
+# Copy package.json and package-lock.json (if available)
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install production dependencies
+RUN npm ci --only=production
 
-# Copy the rest of the application code
+# Copy the entire application code
 COPY . .
 
-# Copy environment file
-# COPY .env .env
+# Build the application (if necessary)
+# RUN npm run build
 
-# Run the build command
-RUN npm run build
+# Set environment variables
+ENV NODE_ENV=production \
+    PORT=5003
 
 # Expose the port
 EXPOSE 5003
 
-# Change permission of entrypoint script
-#RUN ["chmod", "+x", "./entrypoint.sh"]
+# Use a non-root user for better security
+# Replace 'userId' with a valid user ID or username
+USER userId
 
-# Set the entrypoint
-ENTRYPOINT [ "node", "dist/server.js" ]
-
+# Start the application
+CMD ["node", "entrypoint.sh"]
