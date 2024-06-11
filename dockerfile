@@ -16,22 +16,8 @@ COPY . .
 # Build your application
 RUN npm run build
 
-# Use a lighter image for your application
-FROM node 
-
-# Set the working directory inside the container
-WORKDIR /usr/src/app
-
-# Copy built files and dependencies from the previous stage
-COPY --from=builder /usr/src/app/build ./build
-COPY --from=builder /usr/src/app/package*.json ./
-
-# Install production dependencies
-RUN npm install --only=production
-
 # Expose the port your app runs on
 EXPOSE 5003
 
 # Command to run the application
-CMD ["node", "./build/server.js"]
-
+CMD ["node", "build/server.js"]
