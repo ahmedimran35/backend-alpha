@@ -25,7 +25,6 @@ EXPOSE 5003
 
 # Use a non-root user for better security
 # Replace 'userId' with a valid user ID or username
-USER userId
 
 # Start the application
 CMD ["node", "entrypoint.sh"]
