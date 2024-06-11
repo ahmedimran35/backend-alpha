@@ -11,4 +11,4 @@ RUN npm i
 #build 
 EXPOSE 5003
 
-ENTRYPOINT [ "node", "dist/server.js" ]
+ENTRYPOINT [ "node", "server.js" ]
