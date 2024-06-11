@@ -13,6 +13,9 @@ RUN npm install
 # Copy the entire application code
 COPY . .
 
+# Copy the .env file
+COPY .env .env
+
 # Build the application
 RUN npm run build
 
@@ -21,13 +24,10 @@ RUN npm prune --production
 
 # Set environment variables
 ENV NODE_ENV=production \
-   PORT=5003
+    PORT=5003
 
 # Expose the port
 EXPOSE 5003
-
-# Copy the .env file after building the application
-COPY .env .env
 
 # Start the application
 CMD ["node", "dist/server.js"]
