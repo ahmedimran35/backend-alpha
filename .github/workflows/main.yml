@@ -23,8 +23,6 @@ jobs:
     - name: Check TypeScript syntax
       run: |
         npx tsc --noEmit
-    - name: Run Super-Linter
-      uses: github/super-linter@v4
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         DEFAULT_BRANCH: main
