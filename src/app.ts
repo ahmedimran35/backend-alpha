@@ -43,7 +43,7 @@ app.use("/api/v1", ApplicationRoute);
 app.get("/", (req: Request, res: Response) => {
   res.status(StatusCodes.OK).send({
     StatusCodes: 404,
-    message: "Pipeline Activated "
+    message: "Pipeline Activated with code ALPHA XD "
   });
 });
 
