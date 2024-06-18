@@ -1,34 +1,67 @@
-name: Deploy to VPS
+name: Deploy to VPS and SonarQube Analysis
 on:
   push:
     branches:
       - main
-
 jobs:
 
+  sonarqube:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm ci
+      - name: Download logback
+        run: |
+          mkdir -p ./sonar-scanner-cli/lib
+          curl -L https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar --output ./sonar-scanner-cli/lib/logback-classic-1.2.3.jar
+          curl -L https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar --output ./sonar-scanner-cli/lib/logback-core-1.2.3.jar
+      - name: Run SonarQube analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: npx sonarqube-scanner \
+          -Dsonar.projectKey=npm \
+          -Dsonar.sources=. \
+          -Dsonar.host.url=$SONAR_HOST_URL \
+          -Dsonar.login=$SONAR_TOKEN \
+          -Djava.class.path=./sonar-scanner-cli/lib/logback-classic-1.2.3.jar:./sonar-scanner-cli/lib/logback-core-1.2.3.jar
+      - name: Upload coverage to SonarQube
+        if: success()
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          npx sonarqube-scanner \
+            -Dsonar.projectKey=npm \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.login=$SONAR_TOKEN \
+            -Djava.class.path=./sonar-scanner-cli/lib/logback-classic-1.2.3.jar:./sonar-scanner-cli/lib/logback-core-1.2.3.jar
+
   deploy:
+    name: Deploy to VPS
+    needs: sonarqube
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '18'
-
       - name: Install dependencies
         run: npm ci
-
       - name: Build the project
         run: npm run build
-
-  update_ssh_linode:
-    name: Telling Backend Server to Update
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: executing remote ssh commands using password
+      - name: Telling Frontend Server to Update
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -37,7 +70,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             # Navigate to the frontend directory
-            # cd /root/backend
-
+            # cd /root/frontend
             # Run the update script
             bash update.sh
